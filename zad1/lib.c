@@ -10,10 +10,14 @@ typedef struct Node {
     struct Node *next;
 } Node;
 
-Table *create_table(int max_size) {
+Table *create_table(int size) {
+    if(size <= 0){
+        fprintf(stderr, "Cannot create a table of size smaller than 1");
+        return NULL;
+    }
     Table *t = calloc(sizeof(Table), 1);
-    t->blocks = calloc(sizeof(Block *), max_size);//TODO maybe table should hold Block* after all
-    t->max_size = max_size;
+    t->blocks = calloc(sizeof(Block *), size);  //TODO maybe table should hold Block* after all
+    t->size = size;
     return t;
 }
 
@@ -134,7 +138,7 @@ int load_block_from_tmp_file(Table *table) {
         free(tmp);
     }
     //inserting the new block in the first available table blocks element
-    for (int i = 0; i < table->max_size; i++) {
+    for (int i = 0; i < table->size; i++) {
         if (table->blocks[i] == NULL) {
             table->blocks[i] = block;
             return i;
@@ -181,19 +185,42 @@ Block *merge_files(char *file1, char *file2) {
     return block;
 }
 
-void merge_file_sequence(Table *table, char **sequence, int start, int seq_length) {
-    if(seq_length + start > table->max_size){
+void merge_file_sequence(Table *table, Sequence* seq, int start) {
+    if(seq->size + start > table->size){
         fprintf(stderr, "Cannot merge files to a block outside the table");
         return;
     }
     char *files[2];
-    for (int i = start; i < seq_length; i++) {
+    for (int i = start; i < seq->size; i++) {
         if (table->blocks[i]) delete_block(table, i);
-        files[0] = strtok(sequence[i], ":");
+        files[0] = strtok(seq->pairs[i], ":");
         files[1] = strtok(NULL, ":");
-        printf("file 1 is %s file 2 is %s\n",files[0], files[1]);
+        printf("Merging file %s and file %s\n",files[0], files[1]);
         table->blocks[i] = merge_files(files[0], files[1]);
     }
+}
+
+Sequence* create_sequence(int size){
+    if(size <= 0){
+        fprintf(stderr, "Cannot create a sequence of size smaller than 1");
+        return NULL;
+    }
+    Sequence* seq = calloc(sizeof(Sequence),1);
+    seq->size = size;
+    seq->pairs = calloc(sizeof(char**), size);
+    seq->current_index = 0;
+    return seq;
+}
+
+int add_file_pair(struct Sequence* seq, char* pair){
+    if(seq->current_index == seq->size){
+        fprintf(stderr, "Cannot add a pair to the sequence. The sequence is full.");
+        return -1;
+    }
+    seq->pairs[seq->current_index] = calloc(sizeof(char), strlen(pair));
+    strcpy(seq->pairs[seq->current_index], pair);
+    seq->current_index++;
+    return 0;
 }
 
 void delete_verse(Table *table, int block_index, int verse_index) { //TODO should it be void?
@@ -217,7 +244,7 @@ void delete_block(Table *table, int block_index) { //TODO should it be void?
 }
 
 void delete_table(Table **table) {
-    for (int i = 0; i < (*table)->max_size; i++) {
+    for (int i = 0; i < (*table)->size; i++) {
         delete_block(*table, i);
     }
     free((*table)->blocks);
@@ -229,7 +256,7 @@ void delete_table(Table **table) {
 int get_block_count(Table *table) {
     if (table == NULL || table->blocks == NULL) return -1;
     int counter = 0;
-    for (int i = 0; i < table->max_size; i++) {
+    for (int i = 0; i < table->size; i++) {
         if (table->blocks[i] != NULL)counter++;
     }
     return counter;
@@ -267,7 +294,7 @@ void print_table(Table *table) {
         printf("The table is NULL");
         return;
     }
-    for (int i = 0; i < table->max_size; i++) {
+    for (int i = 0; i < table->size; i++) {
         if (table->blocks[i] != NULL) {
             printf("\nBlock no %d (size = %d):\n", i, table->blocks[i]->size);
             print_block(table, i);

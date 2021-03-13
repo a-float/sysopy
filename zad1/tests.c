@@ -10,13 +10,15 @@ int main() {
 
     print_table(table);
 
-    char** seq = calloc(sizeof(char*), 2);
-    seq[0] = calloc(sizeof(char), 12);
-    seq[1] = calloc(sizeof(char), 12);
-    seq[0] = strcpy(seq[0],"a.txt:b.txt");
-    seq[1] = strcpy(seq[1],"a.txt:a.txt");
+    Sequence* seq = create_sequence(2);
+    add_file_pair(seq, "a.txt:b.txt");
+    add_file_pair(seq, "b.txt:b.txt");
+//    seq[0] = calloc(sizeof(char), 12);
+//    seq[1] = calloc(sizeof(char), 12);
+//    seq[0] = strcpy(seq[0],"a.txt:b.txt");
+//    seq[1] = strcpy(seq[1],"a.txt:a.txt");
 
-    merge_file_sequence(table, seq, 0, 2);
+    merge_file_sequence(table, seq, 0);
 //    delete_verse(table,0,3);
 //    save_block_to_tmp_file(table, 0);
 ////    delete_block(table,1);
