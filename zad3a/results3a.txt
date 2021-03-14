@@ -1,0 +1,194 @@
+#################################################### static
+bash ./test.sh 5 100 25 1000 100 10000
+no of pairs: 5, no of lines: 2*100
+
+                   merge_files: real time: 0  sys time: 0 user time: 0
+                  save_to_file: real time: 0  sys time: 0 user time: 0
+           adding_and_removing: real time: 0  sys time: 0 user time: 0
+                  remove_table: real time: 0  sys time: 0 user time: 0
+
+no of pairs: 5, no of lines: 2*1000
+
+                   merge_files: real time: 0  sys time: 0 user time: 0
+                  save_to_file: real time: 1  sys time: 0 user time: 0
+           adding_and_removing: real time: 0  sys time: 0 user time: 0
+                  remove_table: real time: 0  sys time: 0 user time: 0
+
+no of pairs: 5, no of lines: 2*10000
+
+                   merge_files: real time: 2  sys time: 0 user time: 1
+                  save_to_file: real time: 4  sys time: 1 user time: 1
+           adding_and_removing: real time: 0  sys time: 0 user time: 1
+                  remove_table: real time: 1  sys time: 0 user time: 0
+
+no of pairs: 25, no of lines: 2*100
+
+                   merge_files: real time: 0  sys time: 0 user time: 0
+                  save_to_file: real time: 1  sys time: 0 user time: 0
+           adding_and_removing: real time: 0  sys time: 0 user time: 0
+                  remove_table: real time: 0  sys time: 0 user time: 0
+
+no of pairs: 25, no of lines: 2*1000
+
+                   merge_files: real time: 1  sys time: 0 user time: 0
+                  save_to_file: real time: 7  sys time: 1 user time: 1
+           adding_and_removing: real time: 3  sys time: 0 user time: 2
+                  remove_table: real time: 1  sys time: 0 user time: 0
+
+no of pairs: 25, no of lines: 2*10000
+
+                   merge_files: real time: 38  sys time: 2 user time: 23
+                  save_to_file: real time: 37  sys time: 12 user time: 4
+           adding_and_removing: real time: 13  sys time: 0 user time: 11
+                  remove_table: real time: 2  sys time: 0 user time: 2
+
+no of pairs: 100, no of lines: 2*100
+
+                   merge_files: real time: 1  sys time: 0 user time: 0
+                  save_to_file: real time: 5  sys time: 2 user time: 1
+           adding_and_removing: real time: 1  sys time: 0 user time: 0
+                  remove_table: real time: 0  sys time: 0 user time: 0
+
+no of pairs: 100, no of lines: 2*1000
+
+                   merge_files: real time: 11  sys time: 1 user time: 4
+                  save_to_file: real time: 22  sys time: 4 user time: 3
+           adding_and_removing: real time: 11  sys time: 0 user time: 4
+                  remove_table: real time: 2  sys time: 0 user time: 1
+
+no of pairs: 100, no of lines: 2*10000
+
+                   merge_files: real time: 73  sys time: 12 user time: 51
+                  save_to_file: real time: 116  sys time: 34 user time: 18
+           adding_and_removing: real time: 57  sys time: 2 user time: 53
+                  remove_table: real time: 12  sys time: 0 user time: 12
+
+#################################################### shared
+bash ./test.sh 5 100 25 1000 100 10000
+no of pairs: 5, no of lines: 2*100
+
+                   merge_files: real time: 0  sys time: 0 user time: 0
+                  save_to_file: real time: 1  sys time: 0 user time: 0
+           adding_and_removing: real time: 0  sys time: 0 user time: 0
+                  remove_table: real time: 0  sys time: 0 user time: 0
+
+no of pairs: 5, no of lines: 2*1000
+
+                   merge_files: real time: 0  sys time: 0 user time: 0
+                  save_to_file: real time: 1  sys time: 0 user time: 0
+           adding_and_removing: real time: 0  sys time: 0 user time: 1
+                  remove_table: real time: 1  sys time: 0 user time: 0
+
+no of pairs: 5, no of lines: 2*10000
+
+                   merge_files: real time: 3  sys time: 0 user time: 2
+                  save_to_file: real time: 7  sys time: 3 user time: 0
+           adding_and_removing: real time: 4  sys time: 1 user time: 1
+                  remove_table: real time: 1  sys time: 0 user time: 0
+
+no of pairs: 25, no of lines: 2*100
+
+                   merge_files: real time: 0  sys time: 0 user time: 0
+                  save_to_file: real time: 2  sys time: 0 user time: 0
+           adding_and_removing: real time: 0  sys time: 0 user time: 0
+                  remove_table: real time: 0  sys time: 0 user time: 0
+
+no of pairs: 25, no of lines: 2*1000
+
+                   merge_files: real time: 3  sys time: 0 user time: 1
+                  save_to_file: real time: 5  sys time: 1 user time: 2
+           adding_and_removing: real time: 0  sys time: 0 user time: 0
+                  remove_table: real time: 1  sys time: 0 user time: 0
+
+no of pairs: 25, no of lines: 2*10000
+
+                   merge_files: real time: 33  sys time: 2 user time: 21
+                  save_to_file: real time: 37  sys time: 10 user time: 6
+           adding_and_removing: real time: 15  sys time: 1 user time: 11
+                  remove_table: real time: 2  sys time: 0 user time: 2
+
+no of pairs: 100, no of lines: 2*100
+
+                   merge_files: real time: 0  sys time: 0 user time: 0
+                  save_to_file: real time: 3  sys time: 0 user time: 1
+           adding_and_removing: real time: 1  sys time: 0 user time: 1
+                  remove_table: real time: 0  sys time: 0 user time: 0
+
+no of pairs: 100, no of lines: 2*1000
+
+                   merge_files: real time: 8  sys time: 1 user time: 5
+                  save_to_file: real time: 10  sys time: 3 user time: 1
+           adding_and_removing: real time: 6  sys time: 0 user time: 4
+                  remove_table: real time: 3  sys time: 0 user time: 1
+
+no of pairs: 100, no of lines: 2*10000
+
+                   merge_files: real time: 121  sys time: 20 user time: 81
+                  save_to_file: real time: 138  sys time: 39 user time: 21
+           adding_and_removing: real time: 65  sys time: 4 user time: 57
+                  remove_table: real time: 9  sys time: 0 user time: 10
+
+#################################################### dynamic
+bash ./test.sh 5 100 25 1000 100 10000
+no of pairs: 5, no of lines: 2*100
+
+                   merge_files: real time: 0  sys time: 0 user time: 0
+                  save_to_file: real time: 1  sys time: 0 user time: 0
+           adding_and_removing: real time: 0  sys time: 0 user time: 0
+                  remove_table: real time: 0  sys time: 0 user time: 0
+
+no of pairs: 5, no of lines: 2*1000
+
+                   merge_files: real time: 2  sys time: 0 user time: 0
+                  save_to_file: real time: 2  sys time: 0 user time: 0
+           adding_and_removing: real time: 0  sys time: 0 user time: 0
+                  remove_table: real time: 0  sys time: 0 user time: 0
+
+no of pairs: 5, no of lines: 2*10000
+
+                   merge_files: real time: 6  sys time: 1 user time: 2
+                  save_to_file: real time: 8  sys time: 3 user time: 1
+           adding_and_removing: real time: 2  sys time: 1 user time: 1
+                  remove_table: real time: 0  sys time: 0 user time: 0
+
+no of pairs: 25, no of lines: 2*100
+
+                   merge_files: real time: 1  sys time: 0 user time: 0
+                  save_to_file: real time: 1  sys time: 0 user time: 0
+           adding_and_removing: real time: 0  sys time: 0 user time: 0
+                  remove_table: real time: 0  sys time: 0 user time: 0
+
+no of pairs: 25, no of lines: 2*1000
+
+                   merge_files: real time: 3  sys time: 0 user time: 1
+                  save_to_file: real time: 5  sys time: 1 user time: 0
+           adding_and_removing: real time: 2  sys time: 0 user time: 1
+                  remove_table: real time: 1  sys time: 0 user time: 1
+
+no of pairs: 25, no of lines: 2*10000
+
+                   merge_files: real time: 38  sys time: 4 user time: 22
+                  save_to_file: real time: 42  sys time: 13 user time: 6
+           adding_and_removing: real time: 15  sys time: 1 user time: 11
+                  remove_table: real time: 2  sys time: 0 user time: 2
+
+no of pairs: 100, no of lines: 2*100
+
+                   merge_files: real time: 1  sys time: 0 user time: 0
+                  save_to_file: real time: 4  sys time: 1 user time: 1
+           adding_and_removing: real time: 0  sys time: 0 user time: 0
+                  remove_table: real time: 0  sys time: 0 user time: 0
+
+no of pairs: 100, no of lines: 2*1000
+
+                   merge_files: real time: 7  sys time: 1 user time: 4
+                  save_to_file: real time: 16  sys time: 3 user time: 4
+           adding_and_removing: real time: 7  sys time: 0 user time: 3
+                  remove_table: real time: 1  sys time: 0 user time: 1
+                  
+no of pairs: 100, no of lines: 2*10000
+
+                   merge_files: real time: 156  sys time: 20 user time: 99
+                  save_to_file: real time: 139  sys time: 44 user time: 15
+           adding_and_removing: real time: 71  sys time: 4 user time: 64
+                  remove_table: real time: 11  sys time: 1 user time: 11

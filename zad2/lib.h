@@ -28,6 +28,7 @@ int get_verse_count(Table* table, int block_index);
 
 Sequence* create_sequence(int size);
 int add_file_pair(Sequence* seq, char* pair);
+int delete_sequence(Sequence** seq);
 
 int load_block_from_tmp_file();
 int save_block_to_tmp_file(Table* table, int block_index);
@@ -40,4 +41,4 @@ void print_verse(char* verse);
 void print_block(Table* table, int block_index);
 void print_table(Table* table);
 
-#endif
+#endif //LAB1_LIB_H
