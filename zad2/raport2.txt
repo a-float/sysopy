@@ -1,66 +1,86 @@
-Test wykonany z uyciem programu skompilowaego statycznie
-
-bash ./test.sh 5 500 25 5000 100 50000
-no of pairs: 5, no of lines: 2*500
-
-                   merge_files: real time: 0  sys time: 0 user time: 0
-                  save_to_file: real time: 1  sys time: 0 user time: 0
-           adding_and_removing: real time: 0  sys time: 0 user time: 0
-                  remove_table: real time: 0  sys time: 0 user time: 0
-
-no of pairs: 5, no of lines: 2*5000
-
-                   merge_files: real time: 4  sys time: 0 user time: 1
-                  save_to_file: real time: 4  sys time: 1 user time: 1
-           adding_and_removing: real time: 2  sys time: 1 user time: 0
-                  remove_table: real time: 1  sys time: 0 user time: 1
-
-no of pairs: 5, no of lines: 2*50000
-
-                   merge_files: real time: 36  sys time: 4 user time: 17
-                  save_to_file: real time: 30  sys time: 9 user time: 5
-           adding_and_removing: real time: 10  sys time: 1 user time: 8
-                  remove_table: real time: 3  sys time: 0 user time: 3
-
-no of pairs: 25, no of lines: 2*500
+bash ./test.sh 10 500 50 5000 100 50000
+no of pairs: 10, no of lines: 2*500
 
                    merge_files: real time: 1  sys time: 0 user time: 0
-                  save_to_file: real time: 2  sys time: 0 user time: 1
-           adding_and_removing: real time: 0  sys time: 0 user time: 0
-                  remove_table: real time: 1  sys time: 0 user time: 0
+                  save_to_file: real time: 0  sys time: 0 user time: 0
+           adding_and_removing: real time: 1  sys time: 0 user time: 1
+                  remove_table: real time: 0  sys time: 0 user time: 0
 
-no of pairs: 25, no of lines: 2*5000
+no of pairs: 10, no of lines: 2*5000
 
-                   merge_files: real time: 13  sys time: 1 user time: 7
-                  save_to_file: real time: 14  sys time: 4 user time: 2
-           adding_and_removing: real time: 4  sys time: 0 user time: 3
-                  remove_table: real time: 2  sys time: 0 user time: 0
+                   merge_files: real time: 5  sys time: 0 user time: 3
+                  save_to_file: real time: 5  sys time: 2 user time: 1
+           adding_and_removing: real time: 3  sys time: 0 user time: 2
+                  remove_table: real time: 0  sys time: 0 user time: 0
 
-no of pairs: 25, no of lines: 2*50000
+no of pairs: 10, no of lines: 2*50000
 
-                   merge_files: real time: 238  sys time: 19 user time: 176
-                  save_to_file: real time: 167  sys time: 61 user time: 23
-           adding_and_removing: real time: 76  sys time: 6 user time: 69
-                  remove_table: real time: 14  sys time: 0 user time: 14
+                   merge_files: real time: 52  sys time: 9 user time: 41
+                  save_to_file: real time: 34  sys time: 17 user time: 7
+           adding_and_removing: real time: 22  sys time: 2 user time: 19
+                  remove_table: real time: 9  sys time: 0 user time: 9
+
+no of pairs: 50, no of lines: 2*500
+
+                   merge_files: real time: 2  sys time: 0 user time: 2
+                  save_to_file: real time: 3  sys time: 0 user time: 1
+           adding_and_removing: real time: 1  sys time: 1 user time: 1
+                  remove_table: real time: 0  sys time: 0 user time: 0
+
+no of pairs: 50, no of lines: 2*5000
+
+                   merge_files: real time: 31  sys time: 3 user time: 18
+                  save_to_file: real time: 19  sys time: 7 user time: 5
+           adding_and_removing: real time: 14  sys time: 0 user time: 11
+                  remove_table: real time: 2  sys time: 0 user time: 2
+
+no of pairs: 50, no of lines: 2*50000
+
+                   merge_files: real time: 433  sys time: 56 user time: 371
+                  save_to_file: real time: 167  sys time: 80 user time: 38
+           adding_and_removing: real time: 201  sys time: 5 user time: 191
+                  remove_table: real time: 26  sys time: 0 user time: 27
 
 no of pairs: 100, no of lines: 2*500
 
-                   merge_files: real time: 3  sys time: 1 user time: 1
-                  save_to_file: real time: 10  sys time: 3 user time: 2
-           adding_and_removing: real time: 2  sys time: 0 user time: 1
-                  remove_table: real time: 1  sys time: 0 user time: 1
+                   merge_files: real time: 4  sys time: 0 user time: 4
+                  save_to_file: real time: 7  sys time: 1 user time: 2
+           adding_and_removing: real time: 2  sys time: 1 user time: 2
+                  remove_table: real time: 1  sys time: 0 user time: 0
 
 no of pairs: 100, no of lines: 2*5000
 
-                   merge_files: real time: 64  sys time: 9 user time: 42
-                  save_to_file: real time: 83  sys time: 28 user time: 9
-           adding_and_removing: real time: 24  sys time: 1 user time: 20
-                  remove_table: real time: 4  sys time: 0 user time: 5
+                   merge_files: real time: 56  sys time: 7 user time: 37
+                  save_to_file: real time: 45  sys time: 14 user time: 11
+           adding_and_removing: real time: 25  sys time: 2 user time: 20
+                  remove_table: real time: 6  sys time: 0 user time: 6
 
 no of pairs: 100, no of lines: 2*50000
 
-                   merge_files: real time: 738  sys time: 54 user time: 641
-                  save_to_file: real time: 686  sys time: 273 user time: 70
-           adding_and_removing: real time: 352  sys time: 15 user time: 314
-                  remove_table: real time: 35  sys time: 0 user time: 34
+                   merge_files: real time: 789  sys time: 55 user time: 700
+                  save_to_file: real time: 340  sys time: 170 user time: 75
+           adding_and_removing: real time: 475  sys time: 10 user time: 415
+                  remove_table: real time: 70  sys time: 0 user time: 58
 
+Wnioski:
+Najwiecej czasu zajmuje samo mergowanie plikow - najwiekszy rzeczywisty czas pracy, ktorego wiekszosc stanowi czas spedzony w trybie uzytkownika - IO zajmuje mala czesc pracy
+Operacja zapisywania tablicy do pliku zajmuje najwiecej czasu systemowego. Zwiazane jest to z koniecznoscia wielokrotnego zapisania danych do plikow.
+Dodawnia i usuwanie blokow zajmuje bardzo malo czasu systemowego, poniewaz zadne dane nie zostaja zapisane ani wczytane z dysku.
+Usuniecie tabeli to szybka operacja wymagajaca tylko zwolnienia pamieci.
+
+Porownujac ponizsze czasy dla testow 100 * 5000 * 2 i 10 * 50000 * 2, czyli takich w ktorych przetworzone zostalo tyle samo wierszy tekstu, mozemy zauwazyc ze stosunek ilosci par do wielkosci plikow nie wplywa znaczaco na czas wykonania. Wyjatkiem jest jednak operacja zapisywania do pliku, poniewaz wieksza ilosc par wiazala sie z wieksza iloscia operacji IO, ktore w sposob znaczacy (33%) wplynely na czas wykonania testu.
+
+
+no of pairs: 100, no of lines: 2*5000
+
+                   merge_files: real time: 56  sys time: 7 user time: 37
+                  save_to_file: real time: 45  sys time: 14 user time: 11
+           adding_and_removing: real time: 25  sys time: 2 user time: 20
+                  remove_table: real time: 6  sys time: 0 user time: 6
+
+no of pairs: 10, no of lines: 2*50000
+
+                   merge_files: real time: 52  sys time: 9 user time: 41
+                  save_to_file: real time: 34  sys time: 17 user time: 7
+           adding_and_removing: real time: 22  sys time: 2 user time: 19
+                  remove_table: real time: 9  sys time: 0 user time: 9

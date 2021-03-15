@@ -192,3 +192,34 @@ no of pairs: 100, no of lines: 2*10000
                   save_to_file: real time: 139  sys time: 44 user time: 15
            adding_and_removing: real time: 71  sys time: 4 user time: 64
                   remove_table: real time: 11  sys time: 1 user time: 11
+
+Wnioski:
+Zwracajac szczegolna uwage na wyniki najwiekszych testow dla najwiekszych danych:
+
+####static
+no of pairs: 100, no of lines: 2*10000
+
+                   merge_files: real time: 73  sys time: 12 user time: 51
+                  save_to_file: real time: 116  sys time: 34 user time: 18
+           adding_and_removing: real time: 57  sys time: 2 user time: 53
+                  remove_table: real time: 12  sys time: 0 user time: 12
+#####shared
+no of pairs: 100, no of lines: 2*10000
+
+                   merge_files: real time: 121  sys time: 20 user time: 81
+                  save_to_file: real time: 138  sys time: 39 user time: 21
+           adding_and_removing: real time: 65  sys time: 4 user time: 57
+                  remove_table: real time: 9  sys time: 0 user time: 10
+######dynamic
+no of pairs: 100, no of lines: 2*10000
+
+                   merge_files: real time: 156  sys time: 20 user time: 99
+                  save_to_file: real time: 139  sys time: 44 user time: 15
+           adding_and_removing: real time: 71  sys time: 4 user time: 64
+                  remove_table: real time: 11  sys time: 1 user time: 11
+
+Mozemy zauwazyc ze:
+Najmniejsze czasy uzyskal program skompiloway statycznie, kolejny byl program ze wspoldzielona biblioteka, a najwolniejszy program z biblioteka dynamiczna.
+
+Sposob kompilacji nie mial znaczacego wplywu na czas wykonania testu zapisu. Ograniczeniem w tym przypadku jest czas operacji IO
+    
