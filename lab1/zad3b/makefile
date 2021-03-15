@@ -7,6 +7,8 @@ mpairs = 25
 bpairs = 100
 o_level = 0
 
+all: static_main
+
 dirs:
 	mkdir -p build
 	mkdir -p data
