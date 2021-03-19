@@ -23,4 +23,5 @@ Napisz funkcję, która jako parametry pobiera nazwę pliku do odczytu, nazwę p
 Napisz program, który kopiując podany plik (parametr programu) do innego pliku (drugi parametr programu), ”łamie” wiersze, które mają więcej niż 50 znaków (łącznie ze spacjami). Znaki po-wyżej 50-tego przenoszone są do nowej linii (dodatkowy wiersz). Wiersze krótsze kopiowane są bez zmian
 
 
-- Dla obu wariantów implementacji należy przeprowadzić pomiar czasu wykonywania obu wariantów programów. Wyniki należy przedstawić w formie pliku pomiar_zad_x.txt
+- Dla obu wariantów implementacji należy przeprowadzić pomiar czasu wykonywania obu wariantów programów.  
+- Wyniki należy przedstawić w formie pliku pomiar_zad_x.txt
