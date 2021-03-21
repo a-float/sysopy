@@ -1,0 +1,8 @@
+0000000abc 0 0 000 00 000 00a 0 0 a b abc
+00 0 0 0 000 00 0 0abc00 0 0 xxx 00 x 00
+ab ab ab 
+abcdabcd
+abcd
+dba
+aa
+b

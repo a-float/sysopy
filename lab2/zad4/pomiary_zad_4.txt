@@ -1,0 +1,25 @@
+Systemowe IO:
+Male dane:
+
+real	0m0.009s
+user	0m0.000s
+sys	0m0.008s
+
+Duze dane (5000 linii):
+
+real	0m14.115s
+user	0m1.186s
+sys	0m12.708s
+
+STL IO:
+Male dane:
+
+real	0m0.012s
+user	0m0.002s
+sys	0m0.000s
+
+Duze dane (5000 linii):
+
+real	0m0.048s
+user	0m0.022s
+sys	0m0.009s
