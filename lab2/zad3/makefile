@@ -26,7 +26,7 @@ test: zad3.c big_dane3.txt
 	printf "Systemowe IO:\n" > $(res)
 	make zad3_sys
 	make run_test
-	printf "\nSTL IO:\n" >> $(res)
+	printf "\nLib IO:\n" >> $(res)
 	make zad3
 	make run_test
 

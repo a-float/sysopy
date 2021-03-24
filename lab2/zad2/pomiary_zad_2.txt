@@ -7,11 +7,11 @@ sys	0m0.001s
 
 Duze dane (100000 linii):
 
-real	0m5.458s
-user	0m3.978s
-sys	0m1.464s
+real	0m5.457s
+user	0m3.589s
+sys	0m1.831s
 
-STL IO:
+Lib IO:
 Male dane:
 
 real	0m0.002s
@@ -20,6 +20,6 @@ sys	0m0.001s
 
 Duze dane (100000 linii):
 
-real	0m0.058s
-user	0m0.035s
-sys	0m0.000s
+real	0m0.066s
+user	0m0.034s
+sys	0m0.002s

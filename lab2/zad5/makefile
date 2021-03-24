@@ -1,6 +1,6 @@
 SHELL := /bin/bash
 cc = gcc -Wall -std=c11 -g
-line_count = 10000
+line_count = 30000
 res = pomiary_zad_5.txt
 
 all:
@@ -26,7 +26,7 @@ test: zad5.c big_dane5.txt
 	printf "Systemowe IO:\n" > $(res)
 	make zad5_sys
 	make run_test
-	printf "\nSTL IO:\n" >> $(res)
+	printf "\nLib IO:\n" >> $(res)
 	make zad5
 	make run_test
 

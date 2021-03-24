@@ -28,7 +28,7 @@ test: zad1.c big_dane1_a.txt big_dane1_b.txt
 	printf "Systemowe IO:\n" > pomiar_zad_1.txt
 	make zad1_sys
 	make run_test
-	printf "\nSTL IO:\n" >> pomiar_zad_1.txt
+	printf "\nLib IO:\n" >> pomiar_zad_1.txt
 	make zad1
 	make run_test
 

@@ -2,16 +2,16 @@ Systemowe IO:
 Male dane:
 
 real	0m0.002s
-user	0m0.000s
-sys	0m0.001s
+user	0m0.001s
+sys	0m0.000s
 
 Duze dane (20000 linii):
 
-real	0m7.619s
-user	0m5.534s
-sys	0m2.012s
+real	0m7.568s
+user	0m5.695s
+sys	0m1.876s
 
-STL IO:
+Lib IO:
 Male dane:
 
 real	0m0.002s
@@ -20,6 +20,6 @@ sys	0m0.001s
 
 Duze dane (20000 linii):
 
-real	0m0.022s
+real	0m0.033s
 user	0m0.018s
-sys	0m0.002s
+sys	0m0.003s
