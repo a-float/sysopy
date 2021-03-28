@@ -56,11 +56,11 @@ int is_dir(const char *name, const struct dirent *entry){
 	}
 }
 
-int search_dir(const char *name, const char *string_to_find, int depth, int max_depth){
+void search_dir(const char *name, const char *string_to_find, int depth, int max_depth){
 	DIR *dir;
     struct dirent *entry;
 
-    if((dir = opendir(name)) == NULL)return -1; // could not open the directory
+    if((dir = opendir(name)) == NULL)exit(-1); // could not open the directory
 
     int indent = depth * 2;
     while ((entry = readdir(dir)) != NULL){
@@ -100,7 +100,7 @@ int main(int argc, char** argv){
 	
 	char *string_to_find;
 	char *start_dir;
-	int max_depth = 999999; //default value
+	int max_depth = 9999; //default value
 
 	///////////////// input
 
@@ -108,12 +108,12 @@ int main(int argc, char** argv){
 		printf("Usage: %s string start_dir (max_depth)\n",argv[0]);
 		return 0;
 	}
-	else if(argc > 3){
+	else if(argc >= 3){
 		string_to_find = argv[1];	
 		start_dir = argv[2];
 	}
 	if(argc >= 4){
-		max_depth = atoi(argv[3]);
+		max_depth = atoi(argv[3]); //0 on error
 	}
 
 	///////////////// end of input
