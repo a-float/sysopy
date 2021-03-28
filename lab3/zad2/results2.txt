@@ -1,0 +1,127 @@
+Wnioski:
+Dla malyc hrozmiarow pikow oraz duzej ilosc par do zmergowania
+wersja nie korzystajaca z forkow jest zdecydowanie szybsza.
+Mozna jednak zauwazyc ze dla plikow o wiekszej ilosc wierszy (50000) roznica czasu pomiedzy wersjami jest wzglednie mniejsza.
+
+Dla najwiekszego testu 70 par plikow po 50000 linijek wersja
+wieloprocesowa jest szybsza.
+
+Uzyskane wyniki swiadcza o tym, ze to samo zadanie podzielone na wiele procesow jest szybsze od wykonywania ich na jednym procesie, jednak utworzenie procesu wiaze sie z kosztem, ktory moze nie byc wart czasu zaoszczedzonego na wieloprocesowosci, jesli kod polecenie wykonane przez nowy proces bedzie zbyt proste.
+Dla najwiekszego testu, na mergu wieloma procesami, zostaje zaoszczedzone wiecej czasu, niz jest poswiecone na ich utworzenie.
+
+
+################## forked merge
+
+bash ./test.sh 10 100 30 1000 50 50000
+no of pairs: 10, no of lines: 2*100
+
+real	0m0,105s
+user	0m0,040s
+sys	0m0,022s
+
+no of pairs: 10, no of lines: 2*1000
+
+real	0m0,168s
+user	0m0,104s
+sys	0m0,037s
+
+no of pairs: 10, no of lines: 2*50000
+
+real	0m7,197s
+user	0m4,487s
+sys	0m1,600s
+
+no of pairs: 30, no of lines: 2*100
+
+real	0m0,162s
+user	0m0,093s
+sys	0m0,047s
+
+no of pairs: 30, no of lines: 2*1000
+
+real	0m0,512s
+user	0m0,370s
+sys	0m0,109s
+
+no of pairs: 30, no of lines: 2*50000
+
+real	0m20,509s
+user	0m13,789s
+sys	0m4,971s
+
+no of pairs: 50, no of lines: 2*100
+
+real	0m0,269s
+user	0m0,162s
+sys	0m0,081s
+
+no of pairs: 50, no of lines: 2*1000
+
+real	0m0,745s
+user	0m0,549s
+sys	0m0,162s
+
+no of pairs: 50, no of lines: 2*50000
+
+real	0m34,826s
+user	0m23,945s
+sys	0m8,852s
+
+
+################## normal merge
+
+bash ./test.sh 10 100 30 1000 50 50000
+no of pairs: 10, no of lines: 2*100
+
+real	0m0,025s
+user	0m0,008s
+sys	0m0,006s
+
+no of pairs: 10, no of lines: 2*1000
+
+real	0m0,120s
+user	0m0,078s
+sys	0m0,017s
+
+no of pairs: 10, no of lines: 2*50000
+
+real	0m6,626s
+user	0m4,355s
+sys	0m1,227s
+
+no of pairs: 30, no of lines: 2*100
+
+real	0m0,028s
+user	0m0,023s
+sys	0m0,004s
+
+no of pairs: 30, no of lines: 2*1000
+
+real	0m0,270s
+user	0m0,225s
+sys	0m0,027s
+
+no of pairs: 30, no of lines: 2*50000
+
+real	0m18,217s
+user	0m13,486s
+sys	0m3,724s
+
+no of pairs: 50, no of lines: 2*100
+
+real	0m0,048s
+user	0m0,039s
+sys	0m0,008s
+
+no of pairs: 50, no of lines: 2*1000
+
+real	0m0,496s
+user	0m0,396s
+sys	0m0,077s
+
+no of pairs: 50, no of lines: 2*50000
+
+real	0m37,438s
+user	0m22,439s
+sys	0m6,057s
+

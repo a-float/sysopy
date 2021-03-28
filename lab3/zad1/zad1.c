@@ -12,7 +12,7 @@ int main(int argc, char** argv){
 
 	for(int i = 0; i < n; i++){
 		if(fork() == 0){
-			printf("Komunikat z procestu nr %d\n",(int)getpid());
+			printf("Komunikat z procesu nr %d\n",(int)getpid());
 			exit(0);
 		}
 	}

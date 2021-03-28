@@ -6,9 +6,9 @@ zad3: zad3.c
 	$(cc) zad3.c -o zad3.out
 
 run: zad3
-	sudo ./zad3.out /home/matt/Sysopy
+	./zad3.out main ../..
 
 .PHONY: clean zad1
 clean:
-	rm -Rf *.exe
+	rm -Rf *.exe *.out
 	
