@@ -1,15 +1,16 @@
-SHELL := /bin/bash
-cc = gcc -Wall -std=c11 -g
+cc = gcc -Wall -std=gnu99 -g
 
-zad1: zad1.c
-	$(cc) zad1.c -o zad1.out
-	./zad1.out
+all: tester main
 
-bbb: zad1_b.c
-	$(cc) zad1_b.c -o zad1_b.out
-	./zad1_b.out
+main: main.c
+	$(cc) main.c -o main.out
 
-.PHONY: clean zad1
+tester: tester.c
+	$(cc) tester.c -o tester.out
+	$(cc) exec.c -o exec.out
+
+test: all
+	./main.out
+
 clean:
-	rm -Rf *.exe *.out
-	
+	rm -Rf *.out

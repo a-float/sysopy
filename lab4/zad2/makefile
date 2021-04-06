@@ -1,12 +1,10 @@
-SHELL := /bin/bash
-cc = gcc -Wall -std=c11 -g
-flags = _USE_GNU
+cc = gcc -Wall -std=gnu99 -g
 
-zad2: zad2.c
-	$(cc) zad2.c -D$(flags) -o zad2.out
-	./zad2.out
+all: main
 
-.PHONY: clean zad2
+main:
+	$(cc) main.c -o main.out
+
 clean:
-	rm -Rf *.exe *.out
-	
+	rm -Rf *.out
+
