@@ -79,9 +79,17 @@ void pending_test(int sig) {
 
 
 int main(int argc, char** argv) {
+  if(argc < 3){
+    printf("Usage: %s -f/-e signal test_type", argv[0]);
+    exit(1);
+  }
   ppid = getppid();
-  if (strcmp(argv[1], "-f")) use_exec = false;
-  if (strcmp(argv[1], "-e")) use_exec = true;
+  if (strcmp(argv[1], "-f"));
+  else if (strcmp(argv[1], "-e")) use_exec = true;
+  else{
+    printf("Invalid exec/fork flag.");
+    exit(1);
+  }
   int sig = atoi(argv[2]);
 
   if(strcmp(argv[3],"-i")){

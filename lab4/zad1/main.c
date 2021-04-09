@@ -8,8 +8,8 @@
 #include <stdbool.h>
 #include <unistd.h>
 
-#define CHILD_OK SIGUSR1
-#define PARENT_OK SIGUSR2
+#define CHILD_SIGNAL SIGUSR1
+#define PARENT_SIGNAL SIGUSR2
 #define TESTER "tester.out"
 
 bool parent_ok, child_ok;
@@ -18,12 +18,12 @@ bool parent_ok, child_ok;
 
 static void parent_ok_handler(int sig) { 
   parent_ok = true; 
-  signal(PARENT_OK, parent_ok_handler);
+  signal(PARENT_SIGNAL, parent_ok_handler);
 }
 static void child_ok_handler(int sig) { 
   // printf("received signal\n");
   child_ok = true; 
-  signal(CHILD_OK, child_ok_handler);
+  signal(CHILD_SIGNAL, child_ok_handler);
 }
 
 
@@ -50,8 +50,8 @@ char* fork_commands[] = { "-i", "-h", "-p", "-m"};
 char* exec_commands[] = { "-i", "-m", "-p"};
 
 int main() {
-  signal(PARENT_OK, parent_ok_handler);
-  signal(CHILD_OK, child_ok_handler);
+  signal(PARENT_SIGNAL, parent_ok_handler);
+  signal(CHILD_SIGNAL, child_ok_handler);
   
   printf("Start of fork test\n");
   print_header("fork");
