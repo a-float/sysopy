@@ -3,16 +3,19 @@
 #include <unistd.h>
 #include <string.h>
 #include <ctype.h>
+#include <sys/types.h>
+#include <sys/wait.h>
 #define MAX_COMP_COUNT 10
 #define MAX_LINE_SIZE 120
 #define MAX_TASK_COUNT 60
-#define MAX_COMM_SIZE 30
 #define MAX_COMM_COUNT 10
+#define MAX_ARG_SIZE 20
 #define MAX_TASKS_LENGTH 10
+#define MAX_ARG_COUNT 7
 
 typedef struct component{
 	char *name;
-	char **commands;
+	char ***commands;
 } component;
 
 typedef struct task{
@@ -42,9 +45,22 @@ char* strcpy_trim(char* src){
 	for(int i = 0; i < len; i++){
 		res[i] = src_cp[start+i];
 	}
-	res[len] = 0;
-	// printf("from '%s' to '%s', start = %d, len = %d\n", src_cp, res, start, len);
 	return res;
+	return NULL;
+}
+
+char** get_args_from_command(const char* original_command){
+	char* command = strdup(original_command);
+	char** args = calloc(sizeof(char*), MAX_ARG_COUNT);
+	char* token = strtok(command, " ");
+	int i = 0;
+	while(token){
+		args[i] = strdup(token);
+		token = strtok(NULL, " ");
+		i++;
+	}
+	free(command);
+	return args;
 	return NULL;
 }
 
@@ -59,26 +75,18 @@ int load_components(FILE* fp, component** comps, task** tasks){
 		if(strcmp(line, "\n") == 0){
 			is_reading_tasks = 1;
 		}
-		// printf("'%s' is of size %d\n",line, read );
-		line[read-1] = 0;
+		if(line[read-1] == '\n')line[read-1]=0;
 		if(is_reading_tasks == 0){
-			char* token = strtok(line, "=");
-			// printf("before '%s'\n", token);
+			char* saveptr;
+			char* token = strtok_r(line, "=", &saveptr);
 			(*comps)[curr_comp].name = strcpy_trim(token);
-			// printf("after '%s'\n", token);
-
-			printf("'%s'\n",(*comps)[curr_comp].name);
 			(*comps)[curr_comp].commands = calloc(sizeof(char*), MAX_COMM_COUNT);
-			// printf("name %s has been saved %d %p\n", token, curr_comp, comps[curr_comp]);
 			
 			int curr_comm = 0;		
 			while (token) {
-			    // printf("token: '%s'\n", token);
-			    token = strtok(NULL, "|");
-			    if(token){
-				    (*comps)[curr_comp].commands[curr_comm] = calloc(sizeof(char), MAX_COMM_SIZE);
-				    strcpy((*comps)[curr_comp].commands[curr_comm], token);
-					printf("'%s'\n",(*comps)[curr_comp].commands[curr_comm]);
+			    token = strtok_r(NULL, "|", &saveptr);
+			    if(token != NULL){
+				    (*comps)[curr_comp].commands[curr_comm] = get_args_from_command(token);
 				    curr_comm++;
 				}
 			}
@@ -86,18 +94,12 @@ int load_components(FILE* fp, component** comps, task** tasks){
 		}
 		if(is_reading_tasks == 1 && strcmp(line, "\n") != 0){
 			char* token = strtok(line, "|");
-			// printf("token is '%s'\n",token );
-
 			int j = 0;
 			if(token){
 				(*tasks)[curr_task].component_names = calloc(sizeof(char*), MAX_TASKS_LENGTH);
 			}
 			while(token){
-
-				printf("token is '%s'\n",token );
-		    	// printf("subtoken: '%s'\n", token);
 			    (*tasks)[curr_task].component_names[j] = strcpy_trim(token);
-			    // printf("saving %s to index %d in task no %d\n", token, j, curr_task);
 				j++;
 				token = strtok(NULL, "|");
 				if(token == NULL)curr_task++;
@@ -118,6 +120,11 @@ void free_comps(component **comps_p){
 		for(int j = 0; j < MAX_COMM_COUNT; j++){
 			
 			if(comps[i].commands[j] != NULL){
+				for(int k = 0; k < MAX_ARG_COUNT; k++){
+					if(comps[i].commands[j][k] == NULL)break; //no more args
+					free(comps[i].commands[j][k]);
+					comps[i].commands[j][k] = NULL;
+				}
 				free(comps[i].commands[j]);
 				comps[i].commands[j] = NULL;
 			}
@@ -150,6 +157,55 @@ void free_tasks(task **tasks_p){
 	tasks_p = NULL;
 }
 
+component* get_component_by_name(char* name, component *comps){
+	for(int i = 0; i < MAX_COMP_COUNT; i++){
+		if(comps[i].name == NULL)return NULL; //there is no more components
+		if(strcmp(comps[i].name, name) == 0)return &comps[i];
+	}
+	return NULL; //component not found
+}
+
+//sets the in of the component chain to out_pipe[0], and its out to out_pipe[1]
+void execute_component(component comp, int* out_pipe){
+	int curr[2];
+	int prev;
+	prev = out_pipe[0];
+	for(int i = 0; i < MAX_COMM_COUNT; i++){
+		if(comp.commands[i] == NULL)break; //no more commands
+		pipe(curr);
+		if(fork() == 0){
+			close(curr[0]);
+			char** args = comp.commands[i];
+			dup2(prev, STDIN_FILENO);
+			dup2(curr[1], STDOUT_FILENO);
+			execvp(args[0], args);
+			exit(1);
+		}
+		close(curr[1]);
+		prev = curr[0];
+	}
+	out_pipe[0] = prev;
+}
+
+void execute_task(task t, component *comps){
+	component* cp;
+	int curr[2];
+	pipe(curr);
+	close(curr[1]);
+	for(int i = 0; i < MAX_COMM_COUNT; i++){
+		if(t.component_names[i] == NULL)break; //no more commands
+		cp = get_component_by_name(t.component_names[i], comps);
+		if(cp == NULL)return; //something went wrong
+		execute_component(*cp, curr);
+	}
+	char buff[50];
+	int read_count;
+	while((read_count = read(curr[0], buff, sizeof(buff))) > 0){
+		write(1, buff, read_count);
+	}
+	while(wait(NULL) > 0);
+	// printf("A child has exited.\n");
+}
 
 int main(int argc, char **argv) {
 	if(argc < 2){
@@ -167,12 +223,15 @@ int main(int argc, char **argv) {
 	load_components(fp, &comps, &tasks);
 	fclose(fp);
 
-	printf("'%s' '%s' '%s'\n", comps[0].name, comps[1].name, comps[2].name);
-	printf("'%s' '%s' '%s'\n", tasks[0].component_names[1], tasks[1].component_names[0], tasks[2].component_names[0]);
+
+	// executing the commands
+	for(int i = 0; i < MAX_TASK_COUNT; i++){
+		if(tasks[i].component_names == NULL)break; //the rest of the tasks is empty
+		printf("Task no %d:\n", i);
+		execute_task(tasks[i], comps);
+	}
+
 	free_comps(&comps);
 	free_tasks(&tasks);
-	// char* t = strcpy_trim("  fuckem ");
-	// printf("%s\n", t);
-	// free(t);
 	return 0;
 }

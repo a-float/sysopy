@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <unistd.h>
 #include <string.h>
+#include <sys/file.h>
 
 FILE* open_file(char* filename, char* flag){
 	FILE* fp = fopen(filename, flag);

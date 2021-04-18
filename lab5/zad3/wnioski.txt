@@ -1,0 +1,57 @@
+Dla N >= 16000 dochodzi do znacznego spadku dokladnosci przezsylanych danych.
+Zapewne jest to skutek przesylania informacji w sposob nie atomiczny.
+
+Test many to one with N = 5
+    Test failed - files differ
+Test one to many with N = 5
+    Test passed - files are the same
+Test many to many with N = 5
+    Test passed - files are the same
+Test many to one with N = 10
+    Test passed - files are the same
+Test one to many with N = 10
+    Test passed - files are the same
+Test many to many with N = 10
+    Test passed - files are the same
+Test many to one with N = 50
+    Test failed - files differ
+Test one to many with N = 50
+    Test passed - files are the same
+Test many to many with N = 50
+    Test passed - files are the same
+Test many to one with N = 500
+    Test passed - files are the same
+Test one to many with N = 500
+    Test passed - files are the same
+Test many to many with N = 500
+    Test passed - files are the same
+Test many to one with N = 1500
+    Test failed - files differ
+Test one to many with N = 1500
+    Test passed - files are the same
+Test many to many with N = 1500
+    Test passed - files are the same
+Test many to one with N = 3000
+    Test passed - files are the same
+Test one to many with N = 3000
+    Test passed - files are the same
+Test many to many with N = 3000
+    Test passed - files are the same
+Test many to one with N = 5000
+    Test passed - files are the same
+Test one to many with N = 5000
+    Test passed - files are the same
+Test many to many with N = 5000
+    Test failed - files differ
+Test many to one with N = 16000
+    Test passed - files are the same
+Test one to many with N = 16000
+    Test failed - files differ
+Test many to many with N = 16000
+    Test failed - files differ
+Test many to one with N = 65600
+    Test failed - files differ
+Test one to many with N = 65600
+    Test failed - files differ
+Test many to many with N = 65600
+    Test failed - files differ

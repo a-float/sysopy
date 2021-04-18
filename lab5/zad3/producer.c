@@ -21,11 +21,11 @@ int main(int argc, char** argv) {
     while((read = fread(buffer, sizeof(char), buff_size, line_fp)) > 0) {
 	    sleep(rand() % 1 + 1);
 	    buffer[read] = 0;
-	    printf("Sending :%s:%s into the pipe\n", argv[2], buffer);
+	    // printf("Sending :%s:%s into the pipe\n", argv[2], buffer);
 	    fprintf(pipe, ":%s:%s", argv[2], buffer);
 	    fflush(pipe);
 	}
-	printf("Producer %d is done\n", getpid());
+	// printf("Producer %d is done\n", getpid());
 	fclose(line_fp);
     // fclose(pipe);
 	return 0;
