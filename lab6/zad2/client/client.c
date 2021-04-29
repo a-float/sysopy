@@ -7,7 +7,7 @@ char client_name[30];
 qid_t peer_qid = -1;
 
 #define disconnect(peer_qid_ptr) \
-	send_message(*peer_qid_ptr, Disconnect, ""); /*TODO maybe handle it differently?*/ \
+	send_message(*peer_qid_ptr, Disconnect, ""); \
 	*peer_qid_ptr = -1; \
 	send_request(server_qid, Disconnect, {.cid=cid}); \
 
@@ -93,7 +93,6 @@ void parse_command(char* comm, qid_t server_qid, id_t cid, qid_t *peer_qid_ptr){
 			cid = recv_msg.content.response.Init.cid; \
 			color_printf(GREEN, "Succesfully connected to the server. Received id = %d\n", cid); \
 		} \
-		if(status == -1)perror("Could not receive because: ");\
 		usleep(1 * 1000 * 1000); \
 	} \
 	int flags = fcntl(0, F_GETFL, 0); \
@@ -108,14 +107,15 @@ int main(){
 	qid = create_queue(client_name);
 	if(qid == -1){
 		perror("Couldn't create the client queue: \n");
-		exit(1); //TODO close some things
+		exit(1);
 	}
 
 	char* server_name = get_server_name();
 	server_qid = mq_open(server_name, O_WRONLY);
 	if(server_qid == -1){
 		printf("Server is not live\n");
-		stop_client(0);
+		close_queue(client_name);
+		exit(1);
 	}
 	free(server_name);
 

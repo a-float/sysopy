@@ -12,7 +12,7 @@ void stop_client(int signo){
 }
 
 #define disconnect \
-	send_message(peer_qid, Disconnect, ""); /*TODO maybe handle it differently?*/ \
+	send_message(peer_qid, Disconnect, "");\
 	peer_qid = -1; \
 	send_request(server_qid, Disconnect, {.cid=cid}); \
 	color_printf(YELLOW,"The conversation has ended\n");
