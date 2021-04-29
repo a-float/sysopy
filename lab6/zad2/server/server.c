@@ -6,6 +6,7 @@ bool awaiting_closure = false;
 client_list clients;
 
 void close_server(int signo){
+	// exit(0);
 	bool no_clients = true;
 	for(int i = 0; i < MAX_CLIENTS; i++){
 		if(clients.qids[i] != -1){
@@ -22,13 +23,22 @@ void close_server(int signo){
 
 int main(){
 	struct message recv_msg;
-	qid = create_queue();
+	char* server_name = get_server_name();
+	qid = create_queue(server_name);
+	printf("server qid is %d\n", qid);
 	color_printf(GREEN, "Starting the server. qid = %d\n", qid);
 	init_clients(&clients);
 	signal(SIGINT, close_server);
+
+	struct mq_attr attr;
+	mq_getattr (qid, &attr);
+    // set the queue to not block any calls    
+    attr.mq_flags = O_NONBLOCK;
+    mq_setattr (qid, &attr, NULL);  
+
 	while(!done){
-		while(msgrcv(qid, &recv_msg, sizeof recv_msg.content, -100, IPC_NOWAIT) != -1){
-			// printf("Received request of type %ld\n", recv_msg.mtype);
+		while(mq_receive(qid, (char*) &recv_msg, MAX_MSG_SIZE+sizeof(msg_type), NULL) != -1){
+			printf("Received request of type %ld\n", recv_msg.mtype);
 			switch(recv_msg.mtype){
 				case Init:
 					handle_Init(recv_msg, &clients);
@@ -53,7 +63,7 @@ int main(){
 		tick;
 	}
 	while(awaiting_closure){ // only catching Stops
-		while(msgrcv(qid, &recv_msg, sizeof recv_msg.content, Stop, IPC_NOWAIT) != -1){
+		while(mq_receive(qid, (char*) &recv_msg, sizeof(recv_msg.content)+sizeof(msg_type), NULL) != -1){
 			if(recv_msg.mtype == Stop){
 				handle_Stop(recv_msg, &clients);
 				bool no_clients = true;
@@ -71,7 +81,8 @@ int main(){
 		}
 		tick;
 	}
-	close_queue(qid);
+	close_queue(server_name);
+	free(server_name);
 	color_printf(YELLOW, "\nClosing the server\n");
 	return 0;
 }

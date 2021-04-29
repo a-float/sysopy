@@ -5,20 +5,19 @@ client = ./client/client.c
 all: server client
 
 server:
-	@make rm_queues
-	@$(cc) $(server) -o server.out
+	@$(cc) $(server) -o server.out -lrt
 	@./server.out
 
 client: $(client)
-	@$(cc) $(client) -o client.out
+	@$(cc) $(client) -o client.out -lrt
 	@./client.out
 
 test: test.c
-	@$(cc) test.c -o test.out
+	@$(cc) test.c -o test.out -lrt
 	@./test.out
 
-rm_queues:
-	ipcrm --all=msg
+rm_mq_queues:
+	rm /dev/mqueue/*
 
 .PHONY: server client
 

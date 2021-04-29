@@ -53,8 +53,9 @@ typedef enum msg_type {
 	List,
 	Init,
 	Connect,
+	Error,
 	Message,
-	Error
+	
 } msg_type;
 
 struct message {
