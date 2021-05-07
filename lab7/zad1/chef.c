@@ -66,8 +66,7 @@ int main(int argc, char** argv){
         get_to_oven(
         	pizza_type = data->oven[pizza_pos]; // take the pizza out
     		data->oven[pizza_pos] = -1; // free a space in the oven
-    		data->table_counter++%MAX_PIZZE; // advance the table counter
-    		int table_pos = data->table_counter; 
+    		int table_pos = data->table_counter++%MAX_PIZZE; // advance the table counter 
     		data->table[table_pos] = pizza_type; // update the table
     		printf("(id:%d %s) Wyjmuję pizze: %d. Liczba pizz w piecu: %d. Liczba pizz na stole: %d.\n",
 				chefid, get_local_time(), 
