@@ -1,16 +1,20 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
-#include <sys/shm.h> 
-#include <sys/ipc.h>
+#include <sys/mman.h>
+#include <sys/stat.h>
+#include <fcntl.h>
+
+#include <semaphore.h>
+#include <sys/stat.h>
 #include <sys/wait.h>
-#include <sys/sem.h>
 #include <time.h>
 #include <stdbool.h>
 #include <signal.h>
 
-#define SEM_KEY 0x713
-#define MEM_KEY 0x1234
+#define SEM_NAME "/MY_SEM"
+#define MEM_NAME "/MY_MEMORY"
+
 #define MAX_PIZZE 5
 
 #define OVEN_DOOR_SEM 0	// starts as 1. How many chefs can acces the oven at once
@@ -22,20 +26,13 @@
 
 static volatile bool running = true;
 
+char *names[] = {"/SEM1","/SEM2","/SEM3","/SEM4","/SEM5"};
 /////////////////////// for shared memory
 struct shared_data {
 	int oven_counter;
 	int table_counter;
 	int oven[5];
 	int table[5];
-};
-
-
-////////////////////// for semaphores
-union semun {
-    int val;
-    struct semid_ds *buf;
-    unsigned short  *array;
 };
 
 //////////////////////time
@@ -61,39 +58,39 @@ char *get_local_time(){
     // printf("oven_counter = %d\n", data->oven_counter);				
 
 
-
 int get_shared_memory(){
-	int id;
-	if ((id = shmget(MEM_KEY, 0, 0)) < 0) {
-        perror("shmget: ");
-        exit(1);
-    }
-    return id;
-}
-
-int get_semaphore(){
-	int id;
-	// 2nd argument is number of semaphores, if zero it gets the exisitng semaphore set
-	// 3rd argument is the mode (IPC_CREAT creates the semaphore set if needed)
-	if ((id = semget(SEM_KEY, 0, 0)) < 0) {
-	    perror("get semget: ");
+	int fd;
+	fd = shm_open(MEM_NAME, O_RDWR, 0666);
+	if (fd == -1){
+		perror("create shm_open: ");
+		exit(11);
 	}
-	return id;
+    return fd;
 }
 
-void change_sem(int semid, int semno, int diff){
-	struct sembuf s = { semno, diff, SEM_UNDO};
-	if(semop(semid, &s, 1) < 0){
-		printf("tried to change sem no %d\n", semno);
-		perror("change sem: "); exit(14);
+sem_t **get_semaphores(){
+	// unsigned int vals[] = {1, MAX_PIZZE, MAX_PIZZE, 0, 1}; // 1 space at the oven, full free oven, empty table, accesible table
+	sem_t **sems = calloc(sizeof(sem_t), SEM_COUNT);
+	for(int i = 0; i < SEM_COUNT; i++){
+		sems[i] = sem_open(names[i], 0);
+		if(sems[i] == SEM_FAILED){
+			perror("get sem_open: ");
+			exit(17);
+		}
 	}
+	return sems;
 }
 
-int get_oven_status(int semid){
-	return MAX_PIZZE - semctl(semid, OVEN_SEM, GETVAL);
+
+int get_oven_status(sem_t **sems){
+	int value;
+	sem_getvalue(sems[OVEN_SEM], &value);
+	return MAX_PIZZE - value;
 }
-int get_table_status(int semid){
-	return semctl(semid, TABLE_BUSY_SEM, GETVAL);
+int get_table_status(sem_t **sems){
+	int value;
+	sem_getvalue(sems[TABLE_BUSY_SEM], &value);
+	return value;
 }
 
 void print_timestamp(int id){
@@ -101,14 +98,15 @@ void print_timestamp(int id){
 }
 
 #define get_to_table(code...) 								\
-	change_sem(semid, TABLE_ACCES_SEM, -1);					\
+	sem_wait(sems[TABLE_ACCES_SEM]);						\
 	code													\
-	change_sem(semid, TABLE_ACCES_SEM, 1);
+	sem_post(sems[TABLE_ACCES_SEM]);
 
 
 void stop_worker(int signo){
 	printf("Closing the worker %d\n", getpid());
 	running = false;
+	exit(99);
 }
 
 void set_signal(){

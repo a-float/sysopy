@@ -12,7 +12,7 @@ test:
 	@$(cc) chef.c -o chef.out -lrt -lpthread
 	@$(cc) deliverer.c -o deliverer.out -lrt -lpthread
 	@$(cc) main.c -o main.out -lrt -lpthread
-	@./main.out 3 3
+	@./main.out 20 7
 
 test: client server
 
