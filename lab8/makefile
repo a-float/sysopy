@@ -1,6 +1,7 @@
 cc = gcc -Wall
+out = wyniki_raw.txt
 
-all: main chef deliverer
+all: main
 
 main:
 	@$(cc) main.c -o main.out -lrt -lpthread
@@ -11,9 +12,23 @@ test_print:
 
 test:
 	@$(cc) main.c -o main.out -lrt -lpthread
-	./main.out 10 blocks lena.pgm out.pgm
+	@./main.out 3 blocks lena.pgm out.pgm
 
+bench: main
+	echo '' > $(out)
+	echo "BLOCKS" >> $(out)
+	@./main.out 1 blocks lena.pgm out.pgm >> $(out)
+	@./main.out 2 blocks lena.pgm out.pgm >> $(out)
+	@./main.out 4 blocks lena.pgm out.pgm >> $(out)
+	@./main.out 8 blocks lena.pgm out.pgm >> $(out)
+	@./main.out 16 blocks lena.pgm out.pgm >> $(out)
+	echo "NUMBERS" >> $(out)
+	@./main.out 1 numbers lena.pgm out.pgm >> $(out)
+	@./main.out 2 numbers lena.pgm out.pgm >> $(out)
+	@./main.out 4 numbers lena.pgm out.pgm >> $(out)
+	@./main.out 8 numbers lena.pgm out.pgm >> $(out)
+	@./main.out 16 numbers lena.pgm out.pgm >> $(out)
 .PHONY: server client
 
 clean:
-	rm -Rf *.out
+	rm -Rf *.out, wyniki_raw.txt out.pgm

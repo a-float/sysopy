@@ -190,7 +190,7 @@ int main(int argc, char **argv){
 		    #endif
 		    pthread_create(&(thread_ids[i]), NULL, thread_image_negative, arg_cp);
 		}
-		char *thread_out = "qqq";
+		char *thread_out = NULL;
 		for(int i = 0; i < thread_count; i++){
 			pthread_join(thread_ids[i], (void**)&thread_out);
 			if(thread_out != NULL){
