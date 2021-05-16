@@ -4,11 +4,19 @@
 #include <pthread.h>
 #include <string.h>
 #include <math.h>
+#include <sys/time.h>
 
 #define MAX_LINE 75
 #define TMP_NAME "tmp.pgm"
 #define NUMBERS 0
 #define BLOCKS 1
+
+#define measure_real_time(code...) 		\
+	struct timeval tv_start, tv_end;	\
+	gettimeofday(&tv_start, NULL); 		\
+	code; 								\
+	gettimeofday(&tv_end, NULL); 		\
+	printf("Total time is %lds %ldus\n", tv_end.tv_sec - tv_start.tv_sec, tv_end.tv_usec - tv_start.tv_usec);
 
 typedef struct image{
 	int width;
@@ -77,10 +85,10 @@ void load_data(const char *filename, image *img){
 	FILE *fd = fopen(TMP_NAME, "r");
 	// int a,b,c;
 	fscanf(fd, "%*s %d %d %d", &(img->width), &(img->height), &(img->max_val));
-	printf("%d %d %d", img->width, img->height, img->max_val);
+	// printf("%d %d %d", img->width, img->height, img->max_val);
 	
 	int img_size = img->width * img->height;
-	printf("\n");
+	// printf("\n");
 	img->data = calloc(img_size, sizeof(int));
 	for(int i = 0; i < img_size; i++){
 		fscanf(fd, "%d", &(img->data[i]));
@@ -94,48 +102,59 @@ void load_data(const char *filename, image *img){
 	}
 }
 void *thread_image_negative(void *vargp){
-	int c = 0; // used to count the numver of changed values
-    struct thread_arg *arg = vargp;
-    // printf("Hi, my number is %d\n", arg->thread_no);
-    if(arg->variant == NUMBERS){
-    	int propor = (arg->img->max_val)/arg->no_of_threads+1;
-    	int min_num = propor*arg->thread_no;
-    	if(arg->thread_no == 0)min_num--; 
-    	int max_num = propor*(arg->thread_no+1);
-    	// printf("doin numbers from %d to %d\n", min_num, max_num);
-    	for(int i = 0; i < get_img_size(arg->img); i++){
-    		if(arg->img->data[i] >= min_num && arg->img->data[i] < max_num){
-    			arg->out_img->data[i] = arg->img->max_val-arg->img->data[i];
-    			c++;
-    		}
-    	}
-    }
-    else if(arg->variant == BLOCKS){
-    	int propor = arg->img->width/arg->no_of_threads + (arg->img->width%arg->no_of_threads != 0);
-    	// printf("%d\n", propor);
-    	int min_col = arg->thread_no*propor;
-    	int max_col = (arg->thread_no+1)*propor+1;
-    	if(arg->thread_no + 1 == arg->no_of_threads)max_col = arg->img->width;
-    	// printf("doin blocks from %d to %d\n", min_col, max_col);
-    	for(int x = min_col; x < max_col; x++){
-    		for(int y = 0; y < arg->img->height; y++){
-    			int index = y*arg->img->width + x;
-    			arg->out_img->data[index] = arg->img->max_val-arg->img->data[index];
-    			c++;
-    		}
-    	}
-    }
-    printf("Thread no %d changed %d values\n", arg->thread_no, c);
-    free(arg);
-    return NULL;
+	struct timeval tv_start, tv_end;
+	gettimeofday(&tv_start, NULL);
+		int c = 0; // used to count the numver of changed values
+	    struct thread_arg *arg = vargp;
+	    // printf("Hi, my number is %d\n", arg->thread_no);
+
+	    if(arg->variant == NUMBERS){
+	    	int propor = (arg->img->max_val)/arg->no_of_threads+1;
+	    	int min_num = propor*arg->thread_no;
+	    	if(arg->thread_no == 0)min_num--; 
+	    	int max_num = propor*(arg->thread_no+1);
+	    	// printf("doin numbers from %d to %d\n", min_num, max_num);
+	    	for(int i = 0; i < get_img_size(arg->img); i++){
+	    		if(arg->img->data[i] >= min_num && arg->img->data[i] < max_num){
+	    			arg->out_img->data[i] = arg->img->max_val-arg->img->data[i];
+	    			c++;
+	    		}
+	    	}
+	    }
+	    else if(arg->variant == BLOCKS){
+	    	int propor = arg->img->width/arg->no_of_threads + (arg->img->width%arg->no_of_threads != 0);
+	    	// printf("%d\n", propor);
+	    	int min_col = arg->thread_no*propor;
+	    	int max_col = (arg->thread_no+1)*propor;
+	    	if(arg->thread_no + 1 == arg->no_of_threads)max_col = arg->img->width;
+	    	// printf("doin blocks from %d to %d\n", min_col, max_col);
+	    	for(int x = min_col; x < max_col; x++){
+	    		for(int y = 0; y < arg->img->height; y++){
+	    			int index = y*arg->img->width + x;
+	    			arg->out_img->data[index] = arg->img->max_val-arg->img->data[index];
+	    			c++;
+	    		}
+	    	}
+	    }
+	    gettimeofday(&tv_end, NULL);
+	    char* buff = calloc(60, sizeof(char));
+		sprintf(buff, "Thread %d changed %d values in %lds %ldus", 
+								arg->thread_no, 
+								c,
+								tv_end.tv_sec - tv_start.tv_sec,
+								tv_end.tv_usec - tv_start.tv_usec);
+		free(arg);
+    return buff; // needs to be freed
 }
    
 int main(int argc, char **argv){
+	//////////////////////////////////////////////INPUT
 	if(argc < 5){
 		printf("Usage: %s no_of_threads variant input_img out_img\n", argv[0]);
 		exit(0);
 	}
 	int thread_count = atoi(argv[1]);
+	printf("m = %d\n", thread_count);
 	int variant;
 	if(strcmp(argv[2], "blocks") == 0){
 		variant = BLOCKS;
@@ -159,26 +178,33 @@ int main(int argc, char **argv){
 							};
 
 	pthread_t thread_ids[thread_count];
-	
-	printf("size is %ld\n", get_img_size(&img)*sizeof(int));
-	for(int i = 0; i < thread_count; i++){
-		struct thread_arg *arg_cp = malloc(sizeof(struct thread_arg));
-		memcpy(arg_cp, &arg, sizeof(struct thread_arg));
-		arg_cp->thread_no = i;
-	    printf("Creating thread no %d\n", arg_cp->thread_no);
-	    pthread_create(&(thread_ids[i]), NULL, thread_image_negative, arg_cp);
-	}
-	for(int i = 0; i < thread_count; i++){
-		pthread_join(thread_ids[i], NULL);
-		#ifdef DEBUG 
-		printf("Joined the thread no %d\n", i);
-		#endif
-	}
+	//////////////////////////////////////////////PARSING
+	// printf("size is %ld\n", get_img_size(&img)*sizeof(int));
+	measure_real_time(
+		for(int i = 0; i < thread_count; i++){
+			struct thread_arg *arg_cp = malloc(sizeof(struct thread_arg));
+			memcpy(arg_cp, &arg, sizeof(struct thread_arg));
+			arg_cp->thread_no = i;
+			#ifdef DEBUG 
+		    printf("Creating thread no %d\n", arg_cp->thread_no);
+		    #endif
+		    pthread_create(&(thread_ids[i]), NULL, thread_image_negative, arg_cp);
+		}
+		char *thread_out = "qqq";
+		for(int i = 0; i < thread_count; i++){
+			pthread_join(thread_ids[i], (void**)&thread_out);
+			if(thread_out != NULL){
+				printf("%s\n", thread_out);
+				free(thread_out);
+			} else printf("out is a NULL\n");
+			// printf("Joined the thread no %d\n", i);
+		}
+	)
+	//////////////////////////////////////////////OUTPUT
 	#ifdef DEBUG 
     printf("Showing the results:\n");
     fprintf_img_data(stdout, &out_img);
     #endif
-
     FILE* out = fopen(out_name, "w");
     if(out == NULL){
     	perror("fopen out_file: ");
