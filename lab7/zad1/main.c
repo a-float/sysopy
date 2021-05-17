@@ -65,6 +65,7 @@ int main(int argc, char** argv){
     }
     data->oven_counter = 0;
     data->table_counter = 0;
+    gettimeofday(&(data->tv), NULL);
 
     printf("Creating workers\n");
 	create_workers(N, CHEF_PATH, 0, pids);

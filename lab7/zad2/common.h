@@ -4,11 +4,10 @@
 #include <sys/mman.h>
 #include <sys/stat.h>
 #include <fcntl.h>
-
 #include <semaphore.h>
 #include <sys/stat.h>
 #include <sys/wait.h>
-#include <time.h>
+#include <sys/time.h>
 #include <stdbool.h>
 #include <signal.h>
 
@@ -33,22 +32,22 @@ struct shared_data {
 	int table_counter;
 	int oven[5];
 	int table[5];
+	struct timeval tv;
 };
 
 //////////////////////time
-char *get_local_time(){
+char *get_local_time(struct timeval *tv){
 	char* buff = malloc(sizeof(char)*30);
-	// struct tm *tmp;
-	// time_t curtime;
-
-	// time(&curtime);
-	// tmp = localtime(&curtime);
-
-	// strftime(buff, 30, "%H:%M:%S", tmp);
-	struct timespec ts;
-	clock_gettime(CLOCK_REALTIME, &ts);
-	sprintf(buff, "%lds%2.fms", ts.tv_sec%200, ts.tv_nsec/1e6);
+	struct timeval tve;
+	gettimeofday(&tve,NULL);
+	sprintf(buff, "%lds %2.ldms", tve.tv_sec - tv->tv_sec, tve.tv_usec - tv->tv_usec);
 	return buff;
+}
+
+void print_timestamp(int id, struct timeval *tv){
+	char* time = get_local_time(tv);
+	printf("(id:%d %s) ", id, time);
+	free(time);
 }
 
 #define print_oven													\
@@ -56,7 +55,6 @@ char *get_local_time(){
     	printf("%d | %d\n", data->oven[i], data->table[i]);			\
     }																
     // printf("oven_counter = %d\n", data->oven_counter);				
-
 
 int get_shared_memory(){
 	int fd;
@@ -81,7 +79,6 @@ sem_t **get_semaphores(){
 	return sems;
 }
 
-
 int get_oven_status(sem_t **sems){
 	int value;
 	sem_getvalue(sems[OVEN_SEM], &value);
@@ -93,15 +90,10 @@ int get_table_status(sem_t **sems){
 	return value;
 }
 
-void print_timestamp(int id){
-	printf("(id:%d %s) ", id, get_local_time());
-}
-
 #define get_to_table(code...) 								\
 	sem_wait(sems[TABLE_ACCES_SEM]);						\
 	code													\
 	sem_post(sems[TABLE_ACCES_SEM]);
-
 
 void stop_worker(int signo){
 	printf("Closing the worker %d\n", getpid());

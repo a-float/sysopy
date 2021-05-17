@@ -23,7 +23,7 @@ int main(int argc, char** argv){
 				if(data->table[i] != -1){	// found a pizza
 					current_pizza = data->table[i];
 					data->table[i] = -1; // mark as empty
-					print_timestamp(workerid);
+					print_timestamp(workerid, &(data->tv));
 					printf("Pobieram pizze: %d. Liczba pizz na stole: %d\n",
 						current_pizza,
 						get_table_status(semid));
@@ -32,7 +32,7 @@ int main(int argc, char** argv){
 			}
 		);
 		sleep(rand()%2+4); // drive to the client
-		print_timestamp(workerid);
+		print_timestamp(workerid, &(data->tv));
 		printf("Dostarczam pizze: %d.\n",
 						current_pizza);
 
