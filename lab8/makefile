@@ -4,14 +4,14 @@ out = wyniki_raw.txt
 all: main
 
 main:
-	@$(cc) main.c -o main.out -lrt -lpthread
+	@$(cc) main.c -o main.out -lpthread
 
 test_print:
-	@$(cc) main.c -o main.out -lrt -lpthread -DDEBUG
-	./main.out 3 blocks hands.pgm out.pgm 
+	@$(cc) main.c -o main.out -lpthread -DDEBUG
+	./main.out 3 blocks feep.pgm out.pgm 
 
 test:
-	@$(cc) main.c -o main.out -lrt -lpthread
+	@$(cc) main.c -o main.out -lpthread
 	@./main.out 3 blocks lena.pgm out.pgm
 
 bench: main

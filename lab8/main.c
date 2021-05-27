@@ -75,6 +75,7 @@ void remove_comments(const char *filename){
 		fflush(stdout);
 	}
 	// printf("\n");
+	free(buff);
 	fprintf(out, "\n");
 	fclose(out);
 	fclose(fd);
@@ -93,14 +94,15 @@ void load_data(const char *filename, image *img){
 	for(int i = 0; i < img_size; i++){
 		fscanf(fd, "%d", &(img->data[i]));
 	}
+	fclose(fd);
 	#ifdef DEBUG 
 	fprintf_img_data(stdout, img); 
 	#endif
-	fclose(fd);
 	if(remove(TMP_NAME) == -1){
 	  perror("Could not delete the tmp file: ");
 	}
 }
+
 void *thread_image_negative(void *vargp){
 	struct timeval tv_start, tv_end;
 	gettimeofday(&tv_start, NULL);
@@ -170,7 +172,7 @@ int main(int argc, char **argv){
 	image img;
 	load_data(in_name, &img);
 	image out_img = img;
-	out_img.data = calloc(get_img_size(&img),sizeof(int));
+	out_img.data = calloc(get_img_size(&img), sizeof(int));
 	struct thread_arg arg = {.variant=variant, 
 							 .no_of_threads=thread_count,
 							 .img = &img,
