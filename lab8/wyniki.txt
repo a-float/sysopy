@@ -11,85 +11,85 @@ Dziala ona przez to znaczenie wolniej w porownaniu do BLOCKS nawet dla m = 1.
 
 BLOCKS
 m = 1
-Thread 0 changed 262144 values in 0s 21044us
-Total time is 0s 22174us
+Thread 0 changed 262144 values in 0s 10159us
+Total time is 0s 12900us
 m = 2
-Thread 0 changed 131072 values in 0s 6906us
-Thread 1 changed 131072 values in 0s 5723us
-Total time is 0s 8531us
+Thread 0 changed 131072 values in 0s 4436us
+Thread 1 changed 131072 values in 0s 3635us
+Total time is 0s 6119us
 m = 4
-Thread 0 changed 65536 values in 0s 1292us
-Thread 1 changed 65536 values in 0s 1252us
-Thread 2 changed 65536 values in 0s 11532us
-Thread 3 changed 65536 values in 0s 12944us
-Total time is 0s 13468us
+Thread 0 changed 65536 values in 0s 2604us
+Thread 1 changed 65536 values in 0s 1197us
+Thread 2 changed 65536 values in 0s 1266us
+Thread 3 changed 65536 values in 0s 8552us
+Total time is 0s 8904us
 m = 8
-Thread 0 changed 32768 values in 0s 798us
-Thread 1 changed 32768 values in 0s 782us
-Thread 2 changed 32768 values in 0s 743us
-Thread 3 changed 32768 values in 0s 2489us
-Thread 4 changed 32768 values in 0s 836us
-Thread 5 changed 32768 values in 0s 799us
-Thread 6 changed 32768 values in 0s 785us
-Thread 7 changed 32768 values in 0s 7251us
-Total time is 0s 10664us
+Thread 0 changed 32768 values in 0s 505us
+Thread 1 changed 32768 values in 0s 593us
+Thread 2 changed 32768 values in 0s 646us
+Thread 3 changed 32768 values in 0s 633us
+Thread 4 changed 32768 values in 0s 502us
+Thread 5 changed 32768 values in 0s 568us
+Thread 6 changed 32768 values in 0s 738us
+Thread 7 changed 32768 values in 0s 1052us
+Total time is 0s 8717us
 m = 16
-Thread 0 changed 16384 values in 0s 296us
-Thread 1 changed 16384 values in 0s 311us
-Thread 2 changed 16384 values in 0s 361us
-Thread 3 changed 16384 values in 0s 372us
-Thread 4 changed 16384 values in 0s 8832us
-Thread 5 changed 16384 values in 0s 501us
-Thread 6 changed 16384 values in 0s 5675us
-Thread 7 changed 16384 values in 0s 309us
-Thread 8 changed 16384 values in 0s 296us
-Thread 9 changed 16384 values in 0s 304us
-Thread 10 changed 16384 values in 0s 310us
-Thread 11 changed 16384 values in 0s 404us
-Thread 12 changed 16384 values in 0s 307us
-Thread 13 changed 16384 values in 0s 337us
-Thread 14 changed 16384 values in 0s 310us
-Thread 15 changed 16384 values in 0s 379us
-Total time is 0s 11395us
+Thread 0 changed 16384 values in 0s 418us
+Thread 1 changed 16384 values in 0s 278us
+Thread 2 changed 16384 values in 0s 293us
+Thread 3 changed 16384 values in 0s 3709us
+Thread 4 changed 16384 values in 0s 360us
+Thread 5 changed 16384 values in 0s 275us
+Thread 6 changed 16384 values in 0s 289us
+Thread 7 changed 16384 values in 0s 336us
+Thread 8 changed 16384 values in 0s 343us
+Thread 9 changed 16384 values in 0s 441us
+Thread 10 changed 16384 values in 0s 362us
+Thread 11 changed 16384 values in 0s 321us
+Thread 12 changed 16384 values in 0s 320us
+Thread 13 changed 16384 values in 0s 283us
+Thread 14 changed 16384 values in 0s 307us
+Thread 15 changed 16384 values in 0s 1264us
+Total time is 0s 8043us
 NUMBERS
 m = 1
-Thread 0 changed 262144 values in 0s 8096us
-Total time is 0s 8664us
+Thread 0 changed 262144 values in 0s 11166us
+Total time is 0s 11848us
 m = 2
-Thread 0 changed 118471 values in 0s 14893us
-Thread 1 changed 143673 values in 0s 8386us
-Total time is 0s 17280us
+Thread 0 changed 118471 values in 0s 9130us
+Thread 1 changed 143673 values in 0s 13244us
+Total time is 0s 14005us
 m = 4
-Thread 0 changed 41118 values in 0s 7068us
-Thread 1 changed 79297 values in 0s 4530us
-Thread 2 changed 113364 values in 0s 14975us
-Thread 3 changed 28365 values in 0s 7250us
-Total time is 0s 19420us
+Thread 0 changed 41118 values in 0s 9612us
+Thread 1 changed 79297 values in 0s 13429us
+Thread 2 changed 113364 values in 0s 16651us
+Thread 3 changed 28365 values in 0s 12411us
+Total time is 0s 22628us
 m = 8
-Thread 0 changed 276 values in 0s 21369us
-Thread 1 changed 40842 values in 0s 3823us
-Thread 2 changed 28980 values in 0s 17695us
-Thread 3 changed 50317 values in 0s 33107us
-Thread 4 changed 70381 values in 0s 36399us
-Thread 5 changed 42983 values in 0s 3770us
-Thread 6 changed 26213 values in 0s 28239us
-Thread 7 changed 2152 values in 0s 25353us
-Total time is 0s 53010us
+Thread 0 changed 276 values in 0s 44330us
+Thread 1 changed 40842 values in 0s 47606us
+Thread 2 changed 28980 values in 0s 49343us
+Thread 3 changed 50317 values in 0s 40665us
+Thread 4 changed 70381 values in 0s 57234us
+Thread 5 changed 42983 values in 0s 58423us
+Thread 6 changed 26213 values in 0s 53839us
+Thread 7 changed 2152 values in 0s 30897us
+Total time is 0s 68475us
 m = 16
-Thread 0 changed 0 values in 0s 3355us
-Thread 1 changed 431 values in 0s 14673us
-Thread 2 changed 17986 values in 0s 36020us
-Thread 3 changed 24597 values in 0s 39081us
-Thread 4 changed 13615 values in 0s 34722us
-Thread 5 changed 17864 values in 0s 51855us
-Thread 6 changed 26998 values in 0s 39469us
-Thread 7 changed 27931 values in 0s 4001us
-Thread 8 changed 35015 values in 0s 62302us
-Thread 9 changed 38631 values in 0s 68918us
-Thread 10 changed 22155 values in 0s 31929us
-Thread 11 changed 12776 values in 0s 57211us
-Thread 12 changed 14732 values in 0s 2870us
-Thread 13 changed 9014 values in 0s 2991us
-Thread 14 changed 395 values in 0s 22185us
-Thread 15 changed 4 values in 0s 2493us
-Total time is 0s 77013us
+Thread 0 changed 0 values in 0s 29299us
+Thread 1 changed 431 values in 0s 38679us
+Thread 2 changed 17986 values in 0s 31802us
+Thread 3 changed 24597 values in 0s 43596us
+Thread 4 changed 13615 values in 0s 49793us
+Thread 5 changed 17864 values in 0s 43446us
+Thread 6 changed 26998 values in 0s 53021us
+Thread 7 changed 27931 values in 0s 52638us
+Thread 8 changed 35015 values in 0s 54367us
+Thread 9 changed 38631 values in 0s 62944us
+Thread 10 changed 22155 values in 0s 37380us
+Thread 11 changed 12776 values in 0s 3328us
+Thread 12 changed 14732 values in 0s 50599us
+Thread 13 changed 9014 values in 0s 62698us
+Thread 14 changed 395 values in 0s 65041us
+Thread 15 changed 4 values in 0s 50663us
+Total time is 0s 78860us
