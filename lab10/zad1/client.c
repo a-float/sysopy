@@ -1,14 +1,37 @@
 #include "shared.h"
 
 struct state {
-  int   score[2];
-  char* nicknames[2];
-  char* symbols[2];
-  char symbol;
+  char* names[2];
+  char* markers[2];
+  char marker;
   struct game_state game;
 } state;
 
-// TODO change to calloc
+int sock;
+
+const char board[] = 
+"			\n"
+" %c │ %c │ %c \n"
+"───┼───┼───\n"
+" %c │ %c │ %c \n"
+"───┼───┼───\n"
+" %c │ %c │ %c \n"
+" 			\n"
+"Your name: 	%c - %s\n"
+"Your opponent: %c - %s\n"
+"Current turn: 	%c\n\n";
+
+void draw_board() {
+	char* b = state.game.board;
+	printf(board, b[0], b[1], b[2], b[3], b[4], b[5], b[6], b[7], b[8],
+			state.markers[0], state.names[0], 
+			state.markers[1], state.names[1],
+			state.game.move
+	);
+	printf("Your move: \n");
+}
+
+// TODO change to calloc?
 int connect_unix(char* path) {
   struct sockaddr_un addr;
   memset(&addr, 0, sizeof(addr));
@@ -39,7 +62,44 @@ int connect_web(char* ipv4, int port) {
   return sock;
 }
 
-int sock;
+
+void handle_server_message(message msg){
+	if (msg.type == msg_wait) {
+		printf("Waiting for an opponent\n");
+    } 
+    else if (msg.type == msg_start_game) {  // start game
+		state.names[1] = msg.payload.start.name;
+		state.markers[1] = msg.payload.start.marker == 'o' ? "x" : "o";
+		state.marker = msg.payload.start.marker;
+		state.markers[0] = msg.payload.start.marker == 'o' ? "o" : "x";
+		draw_board();
+    } 
+    else if (msg.type == msg_name_taken) {
+        printf("This username is already taken\n");
+        close(sock);
+        exit(0);
+    } 
+    else if (msg.type == msg_full) {
+		printf("Server is full\n");
+		close(sock);
+		exit(0);
+    } 
+    else if (msg.type == msg_ping) // activity check
+        write(sock, &msg, sizeof msg);
+    else if (msg.type == msg_game_state) { // got the new game state
+		memcpy(&state.game, &msg.payload.state, sizeof state.game);
+		// render_update();
+		draw_board();
+    } 
+    else if (msg.type == msg_win) { // end of the game
+        if (msg.payload.win == state.marker) printf("\r You won! ^^\n\n");
+        else if (msg.payload.win == '-') printf("\r No one has won.\n\n");
+        else printf("\r You lost :c\n\n");
+        close(sock);
+        exit(0);
+    }
+}
+
 int main(int argc , char *argv[])
 {
 	//////////////////////////INPUT
@@ -59,7 +119,7 @@ int main(int argc , char *argv[])
   	}
 	
 	//////////////////////////SETUP
-  	char* name = state.nicknames[0] = argv[1];
+  	char* name = state.names[0] = argv[1];
   	write(sock, name, strlen(name));
 
   	int epoll_fd = epoll_create1(0);
@@ -85,16 +145,20 @@ int main(int argc , char *argv[])
 		for(int i = 0; i < event_count; i++){
 			if (events[i].data.fd == STDIN_FILENO) { // keyboard event
 				if (scanf("%s", c) != -1){
-					// char second_input;
-					// while ((second_input = getchar()) != EOR && x != '\n');
-					printf("Your input is %s\n", c);
 					message msg = { .type = msg_move };
 					msg.payload.move = c[0];
 					write(sock, &msg, sizeof(msg));
 				}
 			}
 			else {  // socket event
-				printf("Received a socket event\n");
+				message msg;
+        		read(sock, &msg, sizeof msg);
+				printf("Received a socket event %d\n", msg.type);
+				if (events[i].events & EPOLLHUP) { // server disconnected
+			        printf("Disconnected from the server\n\n");
+			        exit(0);
+			    } 
+				handle_server_message(msg);
 			}
 		}
 	}

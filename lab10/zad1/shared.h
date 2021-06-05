@@ -41,15 +41,20 @@ typedef struct message {
 	enum msg_type {
 		msg_ping,
 		msg_name_taken,
+		msg_wait,
 		msg_full,
+		msg_start_game,
+		msg_game_state,
 		msg_move,
-		msg_quit
+		msg_quit,
+		msg_win,
+		msg_lose
 	} type;
 	union msg_payload {
 		struct { 
 			char name[NAME_SIZE];
 			char marker;
-		} play;
+		} start;
 		int move;
 		struct game_state state;
 		char win;
