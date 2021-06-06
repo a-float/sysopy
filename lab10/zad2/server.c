@@ -2,6 +2,7 @@
 
 #define MAX_CONN 10
 #define PING_COOLDOWN 5
+#define MAX_TRIES 10
 
 union addr {
 	struct sockaddr_un uni;
@@ -40,7 +41,9 @@ void send_gamestate(client* client) {
   	color_printf(CYAN, "sending gamestate to %s\n", client->name);
 	message msg = { .type = msg_game_state };
 	memcpy(&msg.payload.state, client->game_state, sizeof(struct game_state));
-	sendto(client->sock, &msg, sizeof(msg), 0, (sa) &client->addr, client->addrlen);
+	for(int i = 0; i<MAX_TRIES; i++){
+		sendto(client->sock, &msg, sizeof(msg), 0, (sa) &client->addr, client->addrlen);
+	}
 }
 
 void start_game(client* client1, client* client2) {
@@ -57,12 +60,15 @@ void start_game(client* client1, client* client2) {
 	message msg = { .type = msg_start_game };
 	strncpy(msg.payload.start.name, client2->name, sizeof(client2->name));
 	client1->marker = msg.payload.start.marker = 'x';
-	sendto(client1->sock, &msg, sizeof(msg), 0, (sa) &client1->addr, client1->addrlen);
+	for(int i = 0; i<MAX_TRIES; i++){
+		sendto(client1->sock, &msg, sizeof(msg), 0, (sa) &client1->addr, client1->addrlen);
+	}
 
 	strncpy(msg.payload.start.name, client1->name, sizeof(client1->name));
 	client2->marker = msg.payload.start.marker = 'o';
-	sendto(client2->sock, &msg, sizeof(msg), 0, (sa) &client2->addr, client2->addrlen);
-
+	for(int i = 0; i<MAX_TRIES; i++){
+		sendto(client2->sock, &msg, sizeof(msg), 0, (sa) &client2->addr, client2->addrlen);
+	}
 	client1->game_state->move = client1->marker;
 	send_gamestate(client1);
 	send_gamestate(client2);
@@ -88,10 +94,12 @@ void add_client(union addr* addr, socklen_t addrlen, int sock, char* name) {
 	    pthread_mutex_unlock(&mutex);
 	    printf("Server is full\n");
 	    message msg = { .type = msg_full };
-	    sendto(sock, &msg, sizeof msg, 0, (sa) addr, addrlen);
+	    for(int i = 0; i<MAX_TRIES; i++){
+		    sendto(sock, &msg, sizeof msg, 0, (sa) addr, addrlen);
+		}
 	    return;
 	  }
-	client* client = &clients[new_client_index];
+	client* client = &(clients[new_client_index]);
 	memcpy(&client->addr, addr, addrlen);
 	client->sock = sock;
 	client->state = waiting;
@@ -99,13 +107,8 @@ void add_client(union addr* addr, socklen_t addrlen, int sock, char* name) {
 	client->pinging = true;
 	
 	printf("%s joined the server\n", name);
-
-	for(int i = 0; i < NAME_SIZE-1; i++){
-		client->name[i] = name[i];
-	}
-	client->name[NAME_SIZE-1] = 0;
-	// strncpy(client->name, name, sizeof(client->name) - 1);
-	color_printf(GREEN, "name is %s\n", client->name);
+	strcpy(client->name, name);
+	color_printf(GREEN, "name is %s\n", clients[new_client_index].name);
 	if (client_with_no_pair) {
 		printf("Connecting %s with %s\n", client->name, client_with_no_pair->name);
 		start_game(client_with_no_pair, client);
@@ -115,7 +118,10 @@ void add_client(union addr* addr, socklen_t addrlen, int sock, char* name) {
 		printf("%s is waiting\n", client->name);
 		client_with_no_pair = client;
 		message msg = { .type = msg_wait };
-		sendto(client->sock, &msg, sizeof msg, 0, (sa) &client->addr, client->addrlen);
+		// to increase the chances it arrives
+		for(int i = 0; i<MAX_TRIES; i++){
+			sendto(client->sock, &msg, sizeof(msg), 0, (sa) &(client->addr), client->addrlen);
+		}
 	}
 	pthread_mutex_unlock(&mutex);
 }
@@ -133,7 +139,9 @@ void delete_client(client* client){
 		client->game_state = NULL;
 	}
 	message msg = { .type = msg_quit };
-	sendto(client->sock, &msg, sizeof msg, 0, (sa) &client->addr, client->addrlen);
+	for(int i = 0; i<MAX_TRIES; i++){
+		sendto(client->sock, &msg, sizeof msg, 0, (sa) &client->addr, client->addrlen);
+	}
 	memset(&client->addr, 0, sizeof(client->addr));
 	client->state = none;
 	client->sock = 0;
@@ -174,7 +182,10 @@ void* ping(void* _) {
       		if (clients[i].state != none) {
         		if (clients[i].pinging) {
           			clients[i].pinging = false;
-          			sendto(clients[i].sock, &msg, sizeof msg, 0, (sa) &clients[i].addr, clients[i].addrlen);
+          			printf("Pinging %s\n", clients[i].name);
+          			for(int i = 0; i<MAX_TRIES; i++){
+	          			sendto(clients[i].sock, &msg, sizeof msg, 0, (sa) &clients[i].addr, clients[i].addrlen);
+	          		}
         		}
        			else delete_client(&clients[i]);
       		}
@@ -272,7 +283,7 @@ int main(int argc , char *argv[])
 
 	// create and bind the internet socket
 	web_sock = socket(AF_INET, SOCK_DGRAM, 0);
-	chck0(local_sock, "socket AF)INET: ", 2);
+	chck0(web_sock, "socket AF_INET: ", 2);
 	init_socket(web_sock, &web_addr, sizeof web_addr);
 
 	signal(SIGINT, on_sigint);
@@ -299,14 +310,15 @@ int main(int argc , char *argv[])
 	        	add_client(&addr, addrlen, sock, msg.payload.name);
 	      	} 
 	      	else {
-	      		client sender;
+	      		client* sender;
 	      		for(int j = 0; j < MAX_CONN; j++){
-	      			if(memcmp(&clients[i].addr, &addr, addrlen) == 0){
-	      				sender = clients[i];
+	      			if(memcmp(&(clients[j].addr), &addr, addrlen) == 0){
+	      				sender = &clients[j];
 	      				break;
 	      			}
 	      		}
-	        	handle_client_message(&sender, &msg);
+	      		printf("Sender name is %s\n", sender->name);
+	        	handle_client_message(sender, &msg);
 			}
 		}
 	}

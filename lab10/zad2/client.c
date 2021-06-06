@@ -60,7 +60,7 @@ int connect_web(char* ipv4, int port) {
     exit(0);
   }
 
-  int sock = socket(AF_INET, SOCK_STREAM, 0);
+  int sock = socket(AF_INET, SOCK_DGRAM, 0);
   chck0(sock, "socket AF_INET: ", 22);
   connect(sock, (struct sockaddr*) &addr, sizeof(addr));
   chck0(sock, "socket AF_INET: ", 23);
@@ -69,10 +69,10 @@ int connect_web(char* ipv4, int port) {
 
 
 void handle_server_message(message msg){
-	if (msg.type == msg_wait) {
-		printf("Waiting for an opponent\n");
-    } 
-    else if (msg.type == msg_start_game) {  // start game
+	// if (msg.type == msg_wait) {
+	// 	printf("Waiting for an opponent\n");
+    // } 
+    if (msg.type == msg_start_game) {  // start game
     	state.names[1] = calloc(1, sizeof(msg.payload.start.name));
 		memcpy(state.names[1], &msg.payload.start.name, sizeof(msg.payload.start.name));
 		state.markers[1] = msg.payload.start.marker == 'o' ? 'x' : 'o';
@@ -95,7 +95,6 @@ void handle_server_message(message msg){
 		exit(0);
     } 
     else if (msg.type == msg_ping){ // activity check
-        printf("Im pinged\n");
         write(sock, &msg, sizeof msg); // write the ping message back
     }
     else if (msg.type == msg_game_state) { // got the new game state
@@ -140,12 +139,11 @@ int main(int argc , char *argv[])
             exit(0);
         }
     }
-	
 	//////////////////////////SETUP
 	signal(SIGINT, on_sigint);
   	message msg = { .type = msg_connect };
     strncpy(msg.payload.name, name, sizeof(msg.payload.name));
-    send(sock, &msg, sizeof msg, 0);
+    sendto(sock, &msg, sizeof(msg), 0, NULL, sizeof(struct sockaddr_in));
 
   	int epoll_fd = epoll_create1(0);
   	chck0(epoll_fd, "epoll_create1: ", 25);
