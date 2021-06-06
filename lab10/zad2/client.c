@@ -32,39 +32,38 @@ void draw_board() {
 	fflush(stdout);
 }
 
-// TODO remove addr
 int connect_unix(char* path, char* user) {
-  struct sockaddr_un addr, bind_addr;
-  memset(&addr, 0, sizeof(addr));
-  bind_addr.sun_family = AF_UNIX;
-  addr.sun_family = AF_UNIX;
-  snprintf(bind_addr.sun_path, sizeof bind_addr.sun_path, "./%s%ld", user, time(NULL));
-  strncpy(addr.sun_path, path, sizeof addr.sun_path);
+    struct sockaddr_un addr, bind_addr;
+    memset(&addr, 0, sizeof(addr));
+    bind_addr.sun_family = AF_UNIX;
+    addr.sun_family = AF_UNIX;
+    snprintf(bind_addr.sun_path, sizeof bind_addr.sun_path, "./%s%ld", user, time(NULL));
+    strncpy(addr.sun_path, path, sizeof addr.sun_path);
 
-  int sock = socket(AF_UNIX, SOCK_DGRAM, 0); 
-  chck0(sock, "socket: ", 1);
-  int res = bind(sock, (void*) &bind_addr, sizeof addr);
-  chck0(res, "socket: ", 2);
-  res = connect(sock, (struct sockaddr*) &addr, sizeof addr);
-  chck0(res, "connect: ", 3);
+    int sock = socket(AF_UNIX, SOCK_DGRAM, 0); 
+    chck0(sock, "socket: ", 1);
+    int res = bind(sock, (void*) &bind_addr, sizeof addr);
+    chck0(res, "socket: ", 2);
+    res = connect(sock, (struct sockaddr*) &addr, sizeof addr);
+    chck0(res, "connect: ", 3);
 
   return sock;
 }
 int connect_web(char* ipv4, int port) {
-  struct sockaddr_in addr;
-  memset(&addr, 0, sizeof(addr));
-  addr.sin_family = AF_INET;
-  addr.sin_port = htons(port);
-  if (inet_pton(AF_INET, ipv4, &addr.sin_addr) <= 0) {
-    printf("Invalid address\n");
-    exit(0);
-  }
+    struct sockaddr_in addr;
+    memset(&addr, 0, sizeof(addr));
+    addr.sin_family = AF_INET;
+    addr.sin_port = htons(port);
+    if (inet_pton(AF_INET, ipv4, &addr.sin_addr) <= 0) {
+        printf("Invalid address\n");
+        exit(0);
+    }
 
-  int sock = socket(AF_INET, SOCK_DGRAM, 0);
-  chck0(sock, "socket AF_INET: ", 22);
-  connect(sock, (struct sockaddr*) &addr, sizeof(addr));
-  chck0(sock, "socket AF_INET: ", 23);
-  return sock;
+    int sock = socket(AF_INET, SOCK_DGRAM, 0);
+    chck0(sock, "socket AF_INET: ", 22);
+    connect(sock, (struct sockaddr*) &addr, sizeof(addr));
+    chck0(sock, "socket AF_INET: ", 23);
+    return sock;
 }
 
 
