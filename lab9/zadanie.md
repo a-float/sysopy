@@ -1,9 +1,9 @@
-Zadania - Zestaw 9
-Opis problemu:
+# Zadania - Zestaw 9
+## Opis problemu:  
 W ramach zadania należy zaimplementować rozwiązanie problemu Świętego Mikołaja.
 Święty Mikołaj śpi w swoim warsztacie na biegunie północnym i może być obudzony tylko w 2 sytuacjach:
-1) wszystkie 9 reniferów wróciło z wakacji,
-2) 3 z 10 elfów ma problemy przy produkcji zabawek.
+1) wszystkie 9 reniferów wróciło z wakacji,  
+2) 3 z 10 elfów ma problemy przy produkcji zabawek.  
 
 Kiedy problemy 3 elfów są rozwiązywane przez Mikołaja to pozostałe nie zgłaszają swoich problemów aż do powrotu pierwszej trójki.
 
@@ -11,14 +11,15 @@ Jeśli Mikołaj się obudzi i zastanie jednocześnie 9 reniferów i 3 elfy przed
 
 Należy zaimplementować program, w którym Mikołaj, renifery oraz elfy to osobne wątki.
 
-Zachowania elfów:
+### Zachowania elfów:
 
 Pracują przez losowy okres czasu (2-5s).
 Chcą zgłosić problem - jeśli liczba oczekujących elfów przed warsztatem Mikołaja jest mniejsza od 3 to idzie przed warsztat (Komunikat: Elf: czeka _ elfów na Mikołaja, ID), w przeciwnym wypadku czeka na powrót pierwszej trójki i dopiero wtedy idzie przed warsztat (Komunikat: Elf: czeka na powrót elfów, ID)
 Jeśli jest trzecim elfem przed warsztatem to wybudza Mikołaja. (Komunikat: Elf: wybudzam Mikołaja, ID)
 Mikołaj się z nimi spotyka. (Komunikat: Elf: Mikołaj rozwiązuje problem, ID) (1-2s)
 Wraca do pracy
-Zachowania reniferów:
+
+### Zachowania reniferów:
 
 Są na wakacjach w ciepłych krajach losowy okres czasu (5-10s)
 Wracaja na biegun północny (Komunikat: Renifer: czeka _ reniferów na Mikołaja, ID), jeśli jest dziewiątym reniferem to wybudza Mikołaja (Komunikat: Renifer: wybudzam Mikołaja, ID).
